@@ -4,14 +4,20 @@ const ApiError = require("../../../errors/ApiError");
 var jwt = require("jsonwebtoken");
 
 const createExpertInDB = async (payload) => {
-  const { Username, BMDC_reg, FullName, Specialization, Email, PhoneNumber, Password} = payload;
+  const { FullName, BMDC_reg, Specialization, Email, PhoneNumber, Password} = payload;
 
   const query =
-    "INSERT INTO Doctors (Username, BMDC_reg, FullName, Specialization, Email, PhoneNumber, Password) VALUES (?, ?, ?, ?, ?, ?, ?)";
-  const values = [Username, BMDC_reg, FullName, Specialization, Email, PhoneNumber, Password];
+    "INSERT INTO Doctors (FullName, BMDC_reg, Specialization, Email, PhoneNumber, Password) VALUES (?, ?, ?, ?, ?, ?)";
+  const values = [FullName, 
+    BMDC_reg, 
+    Specialization, 
+    Email, 
+    PhoneNumber, 
+    Password
+  ];
 
   const selectQuery =
-  "SELECT Username, BMDC_reg, FullName, Specialization, Email, PhoneNumber, Password FROM Doctors";
+  "SELECT FullName, BMDC_reg, Specialization, Email, PhoneNumber, Password FROM Doctors";
 
   await pool.promise().query(query, values);
 

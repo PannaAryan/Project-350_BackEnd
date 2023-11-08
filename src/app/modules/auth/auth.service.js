@@ -4,26 +4,34 @@ const ApiError = require("../../../errors/ApiError");
 var jwt = require("jsonwebtoken");
 
 const createUserInDB = async (payload) => {
-  const { FirstName , LastName , Username, Email, PhoneNumber, NID, Password } = payload;
-  
+  const { FirstName, LastName, Email, PhoneNumber, DateOfBirth, Password } =
+    payload;
 
   const query =
-    "INSERT INTO patients ( FirstName , LastName , Username, Email, PhoneNumber, NID, Password) VALUES ( ?, ?,?, ?,?, ?, ?)";
-  const values = [FirstName , LastName , Username, Email, PhoneNumber, NID, Password];
+    "INSERT INTO patients ( FirstName, LastName, Email, PhoneNumber, DateOfBirth, Password) VALUES ( ?, ?,?, ?,?, ?)";
+  const values = [
+    FirstName,
+    LastName,
+    Email,
+    PhoneNumber,
+    DateOfBirth,
+    Password
+  ];
 
-  const selectQuery =
-  "SELECT FirstName , LastName , Username, Email, PhoneNumber, NID, Password FROM patients";
+  const [createdUser] = await pool.promise().query(query, values);
 
-  await pool.promise().query(query, values);
+  const selectQuery = "SELECT * FROM patients WHERE UserID = ?";
 
-  const [createdUser] = (await pool.promise().query(selectQuery));
+  const selectValues = [createdUser?.insertId];
 
-  return createdUser;
+  const [user] = (await pool.promise().query(selectQuery, selectValues))[0];
+
+  return user;
 };
 
 const loginUser = async (payload) => {
   const { Email, Password } = payload;
-  const query = "SELECT * FROM patients";
+  const query = "SELECT * FROM patients WHERE Email = ?";
   const values = [Email];
 
   const [user] = (await pool.promise().query(query, values))[0];
@@ -34,7 +42,7 @@ const loginUser = async (payload) => {
 
       const accessToken = jwt.sign(
         {
-          NID, 
+          NID,
           Username,
           Email,
         },

@@ -11,10 +11,6 @@ const moduleRoutes = [
     route: authRoutes,
   },
   {
-    path: "/users",
-    route: userRoutes,
-  },
-  {
     path: "/expert",
     route: expertRoutes,
   },
