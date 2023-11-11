@@ -11,6 +11,20 @@ const createTable = () => {
   //     }
   //   }
   // );
+
+  // pool.query(
+  //   "CREATE TABLE IF NOT EXISTS availableSlots (UserID SERIAL PRIMARY KEY NOT NULL, docID VARCHAR(20), starting_time DATETIME, ending_time DATETIME DEFAULT (starting_time + INTERVAL 1 HOUR), FOREIGN KEY (docID) REFERENCES Doctors(BMDC_reg));",
+  //   (error) => {
+  //     if (error) {
+  //       console.log(`error occurred while creating slots table ${error}`);
+  //     } else {
+  //       console.log("slots table created");
+  //     }
+  //   }
+  // );
+
+
+
   // pool.query(
   //   "CREATE TABLE IF NOT EXISTS Doctors (FullName VARCHAR(255), BMDC_reg VARCHAR(20) PRIMARY KEY NOT NULL, Specialization VARCHAR(255) NOT NULL, Email VARCHAR(255) UNIQUE NOT NULL, PhoneNumber VARCHAR(15) NOT NULL, Password VARCHAR(255) NOT NULL);",
   //   (error) => {
@@ -22,8 +36,10 @@ const createTable = () => {
   //   }
   // );
   // pool.query(
-  //   'DROP TABLE Doctors;'
+  //   'ALTER TABLE availableSlots CHANGE COLUMN UserID slotID VARCHAR(255);'
   // )
 };
+
+
 
 module.exports = createTable;
