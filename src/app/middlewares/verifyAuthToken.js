@@ -12,14 +12,22 @@ const verifyAuthToken = async (req, res, next) => {
     }
 
     const authTokenData = jwt.verify(authToken, config.jwt.secret);
+    
 
     if (!authTokenData) {
       throw new ApiError(401, "Invalid authorization token");
     }
 
-    const userID = authTokenData.id;
-    const query = "SELECT * FROM users WHERE id = ?";
-    const values = [userID];
+    const userEmail = authTokenData.Email;
+    let query;
+    if (authTokenData?.role==="Doctor"){
+      query = "SELECT * FROM Doctors WHERE Email = ?";
+    }
+
+    if (authTokenData?.role==="patient"){
+      query = "SELECT * FROM patients WHERE Email = ?";
+    }
+    const values = [userEmail];
 
     const [user] = (await pool.promise().query(query, values))[0];
 

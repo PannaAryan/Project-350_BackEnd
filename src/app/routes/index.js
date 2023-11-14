@@ -16,7 +16,7 @@ const moduleRoutes = [
     route: expertRoutes,
   },
   {
-    path: "/Slots",
+    path: "/slots",
     route: SlotsRoutes,
   },
 ];

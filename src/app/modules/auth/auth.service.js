@@ -38,13 +38,13 @@ const loginUser = async (payload) => {
 
   if (user) {
     if (user.Password === Password) {
-      const { NID, Username, Email } = user;
+      const { UserID, Email } = user;
 
       const accessToken = jwt.sign(
         {
-          NID,
-          Username,
+          UserID,
           Email,
+          role: "Patient"
         },
         config.jwt.secret,
         { expiresIn: config.jwt.expires_in }

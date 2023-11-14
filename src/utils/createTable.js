@@ -13,12 +13,24 @@ const createTable = () => {
   // );
 
   // pool.query(
-  //   "CREATE TABLE IF NOT EXISTS availableSlots (UserID SERIAL PRIMARY KEY NOT NULL, docID VARCHAR(20), starting_time DATETIME, ending_time DATETIME DEFAULT (starting_time + INTERVAL 1 HOUR), FOREIGN KEY (docID) REFERENCES Doctors(BMDC_reg));",
+  //   "CREATE TABLE IF NOT EXISTS availableSlots (SlotID SERIAL PRIMARY KEY NOT NULL, docID VARCHAR(20), starting_time DATETIME, ending_time DATETIME DEFAULT (starting_time + INTERVAL 1 HOUR), FOREIGN KEY (docID) REFERENCES Doctors(BMDC_reg));",
   //   (error) => {
   //     if (error) {
   //       console.log(`error occurred while creating slots table ${error}`);
   //     } else {
   //       console.log("slots table created");
+  //     }
+  //   }
+  // );
+
+
+  // pool.query(
+  //   "CREATE TABLE IF NOT EXISTS Booking (BookID INT AUTO_INCREMENT PRIMARY KEY NOT NULL, PatientID INT, SlotServiceID INT, DateofBooking DATE, STATUS ENUM('Pending', 'Completed'), FOREIGN KEY (PatientID) REFERENCES patients(UserID), FOREIGN KEY (SlotServiceID) REFERENCES availableSlots(SlotID));",
+  //   (error) => {
+  //     if (error) {
+  //       console.log(`error occurred while creating slots table ${error}`);
+  //     } else {
+  //       console.log("booking table created");
   //     }
   //   }
   // );
@@ -36,7 +48,7 @@ const createTable = () => {
   //   }
   // );
   // pool.query(
-  //   'ALTER TABLE availableSlots CHANGE COLUMN UserID slotID VARCHAR(255);'
+  //   'ALTER TABLE availableSlots MODIFY COLUMN SlotID INT AUTO_INCREMENT;'
   // )
 };
 

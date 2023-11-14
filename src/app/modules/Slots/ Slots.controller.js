@@ -3,9 +3,12 @@ const sendResponse = require("../../../shared/sendResponse");
 const authService = require("./Slots.service");
 
 const createSlots = catchAsync(async (req, res) => {
-  const user = req.body;
+  const slotsData = req.body;
+  const user = req.verifiedUser;
+  //console.log(user);
 
-  const result = await authService.createSlotsInDB(user);
+  const result = await authService.createSlotsInDB(slotsData, user?.BMDC_reg);
+
 
   sendResponse(res, {
     statusCode: 200,
@@ -15,9 +18,27 @@ const createSlots = catchAsync(async (req, res) => {
   });
 });
 
+const getAllSlots = catchAsync(async (req, res) => {
+  const user = req.verifiedUser;
+
+  const result = await authService.getAllSlotsFromDB(user);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: `${
+      result.length === 0
+        ? "No slots found."
+        : "Slots retrieved successfully."
+    }`,
+    data: result,
+  });
+});
+
 
 const SlotsController = {
     createSlots,
+    getAllSlots,
 };
 
 module.exports = SlotsController;

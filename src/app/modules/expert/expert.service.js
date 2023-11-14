@@ -28,10 +28,11 @@ const createExpertInDB = async (payload) => {
 
 const loginExpert = async (payload) => {
   const { Email, Password } = payload;
-  const query = "SELECT * FROM Doctors";
+  const query = "SELECT * FROM Doctors WHERE Email = ?";
   const values = [Email];
 
   const [expert] = (await pool.promise().query(query, values))[0];
+  
 
   if (expert) {
     if (expert.Password === Password) {
@@ -39,9 +40,9 @@ const loginExpert = async (payload) => {
 
       const accessToken = jwt.sign(
         {
-          Username, 
           BMDC_reg,
           Email,
+          role: "Doctorj"
         },
         config.jwt.secret,
         { expiresIn: config.jwt.expires_in }

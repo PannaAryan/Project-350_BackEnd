@@ -3,7 +3,7 @@ const pool = require("../../../pool");
 const ApiError = require("../../../errors/ApiError");
 var jwt = require("jsonwebtoken");
 
-const createSlotsInDB = async (payload, docID) => {
+const createBookingInDB = async (payload, docID) => {
   const {starting_time} =
     payload;
 
@@ -25,22 +25,9 @@ const createSlotsInDB = async (payload, docID) => {
   return slot;
 };
 
-const getAllSlotsFromDB = async (payload, docID) => {
-  const {starting_time} =
-    payload;
-
-  const selectQuery = "SELECT * FROM availableSlots WHERE slotID = ?";
-
-  const selectValues = [starting_time];
-  
-  const [slot] = (await pool.promise().query(selectQuery, selectValues));
-
-  return slot;
+const bookingService = {
+    createBookingInDB,
+    //getAllSlotsFromDB,
 };
 
-const SlotsService = {
-    createSlotsInDB,
-    getAllSlotsFromDB,
-};
-
-module.exports = SlotsService;
+module.exports = bookingService;
