@@ -9,5 +9,4 @@ const pool = mysql.createConnection({
   user: config.db.user,
 });
 
-// console.log(config);
 module.exports = pool;

@@ -1,18 +1,12 @@
-const config = require("../../../config");
 const pool = require("../../../pool");
-const ApiError = require("../../../errors/ApiError");
-var jwt = require("jsonwebtoken");
+const userRoleEnum = require("../../../shared/enums");
 
 const createSlotsInDB = async (payload, docID) => {
-  const {starting_time} =
-    payload;
+  const { starting_time } = payload;
 
   const query =
     "INSERT INTO availableSlots (docID, starting_time) VALUES (?, ?)";
-  const values = [
-    docID,
-    starting_time
-  ];
+  const values = [docID, starting_time];
 
   const [createdSlots] = await pool.promise().query(query, values);
 
@@ -25,22 +19,39 @@ const createSlotsInDB = async (payload, docID) => {
   return slot;
 };
 
-const getAllSlotsFromDB = async (payload, docID) => {
-  const {starting_time} =
-    payload;
+const getAllSlotsFromDB = async (user) => {
+  let slot;
 
-  const selectQuery = "SELECT * FROM availableSlots WHERE slotID = ?";
-
-  const selectValues = [starting_time];
+  const selectQuery = `
+    SELECT
   
-  const [slot] = (await pool.promise().query(selectQuery, selectValues));
+    availableSlots.SlotID,
+    availableSlots.docID AS BMDC_reg,
+    availableSlots.starting_time,
+    availableSlots.ending_time,
+  
+    Doctors.FullName,
+    Doctors.Specialization,
+    Doctors.Email,
+    Doctors.PhoneNumber
+  
+    FROM availableSlots
+    JOIN Doctors ON availableSlots.docID = Doctors.BMDC_reg
+    ${user.role === userRoleEnum.Doctor ? "WHERE availableSlots.docID = ?" : ""}
+    `;
+
+  [slot] = await pool
+    .promise()
+    .query(selectQuery, [
+      user.role === userRoleEnum.Doctor ? user.BMDC_reg : null,
+    ]);
 
   return slot;
 };
 
 const SlotsService = {
-    createSlotsInDB,
-    getAllSlotsFromDB,
+  createSlotsInDB,
+  getAllSlotsFromDB,
 };
 
 module.exports = SlotsService;

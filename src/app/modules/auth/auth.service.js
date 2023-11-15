@@ -3,6 +3,8 @@ const pool = require("../../../pool");
 const ApiError = require("../../../errors/ApiError");
 var jwt = require("jsonwebtoken");
 
+const userRoleEnum = require("../../../shared/enums");
+
 const createUserInDB = async (payload) => {
   const { FirstName, LastName, Email, PhoneNumber, DateOfBirth, Password } =
     payload;
@@ -15,7 +17,7 @@ const createUserInDB = async (payload) => {
     Email,
     PhoneNumber,
     DateOfBirth,
-    Password
+    Password,
   ];
 
   const [createdUser] = await pool.promise().query(query, values);
@@ -44,7 +46,7 @@ const loginUser = async (payload) => {
         {
           UserID,
           Email,
-          role: "Patient"
+          role: userRoleEnum.Patient,
         },
         config.jwt.secret,
         { expiresIn: config.jwt.expires_in }

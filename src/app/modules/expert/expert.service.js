@@ -2,22 +2,25 @@ const config = require("../../../config");
 const pool = require("../../../pool");
 const ApiError = require("../../../errors/ApiError");
 var jwt = require("jsonwebtoken");
+const userRoleEnum = require("../../../shared/enums");
 
 const createExpertInDB = async (payload) => {
-  const { FullName, BMDC_reg, Specialization, Email, PhoneNumber, Password} = payload;
+  const { FullName, BMDC_reg, Specialization, Email, PhoneNumber, Password } =
+    payload;
 
   const query =
     "INSERT INTO Doctors (FullName, BMDC_reg, Specialization, Email, PhoneNumber, Password) VALUES (?, ?, ?, ?, ?, ?)";
-  const values = [FullName, 
-    BMDC_reg, 
-    Specialization, 
-    Email, 
-    PhoneNumber, 
-    Password
+  const values = [
+    FullName,
+    BMDC_reg,
+    Specialization,
+    Email,
+    PhoneNumber,
+    Password,
   ];
 
   const selectQuery =
-  "SELECT FullName, BMDC_reg, Specialization, Email, PhoneNumber, Password FROM Doctors";
+    "SELECT FullName, BMDC_reg, Specialization, Email, PhoneNumber, Password FROM Doctors";
 
   await pool.promise().query(query, values);
 
@@ -32,17 +35,16 @@ const loginExpert = async (payload) => {
   const values = [Email];
 
   const [expert] = (await pool.promise().query(query, values))[0];
-  
 
   if (expert) {
     if (expert.Password === Password) {
-      const { Username, BMDC_reg, Email } = expert;
+      const { BMDC_reg, Email } = expert;
 
       const accessToken = jwt.sign(
         {
           BMDC_reg,
           Email,
-          role: "Doctorj"
+          role: userRoleEnum.Doctor,
         },
         config.jwt.secret,
         { expiresIn: config.jwt.expires_in }

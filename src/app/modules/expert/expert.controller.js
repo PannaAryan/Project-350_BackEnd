@@ -17,9 +17,8 @@ const createExpert = catchAsync(async (req, res) => {
 
 const loginExpert = catchAsync(async (req, res) => {
   const loginDAta = req.body;
-  console.log(loginDAta);
-  const result = await expertService.loginExpert(loginDAta);
 
+  const result = await expertService.loginExpert(loginDAta);
 
   sendResponse(res, {
     statusCode: 200,
