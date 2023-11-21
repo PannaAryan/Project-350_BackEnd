@@ -11,7 +11,7 @@ async function main() {
         console.log(`error occurred while connecting ${error}`);
       } else {
         console.log("connection created with Mysql successfully");
-        // createTable();
+        createTable();
       }
     });
 

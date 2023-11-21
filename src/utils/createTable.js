@@ -22,7 +22,7 @@ const createTable = () => {
   //   }
   // );
   // pool.query(
-  //   "CREATE TABLE IF NOT EXISTS Booking (BookID INT AUTO_INCREMENT PRIMARY KEY NOT NULL, PatientID INT, SlotServiceID INT, DateofBooking DATE, STATUS ENUM('Pending', 'Completed'), FOREIGN KEY (PatientID) REFERENCES patients(UserID), FOREIGN KEY (SlotServiceID) REFERENCES availableSlots(SlotID));",
+  //   "CREATE TABLE IF NOT EXISTS Booking (BookID INT UNIQUE AUTO_INCREMENT PRIMARY KEY NOT NULL , PatientID INT, SlotServiceID INT UNIQUE, DateofBooking DATE, STATUS ENUM('Pending', 'Completed'), FOREIGN KEY (PatientID) REFERENCES patients(UserID), FOREIGN KEY (SlotServiceID) REFERENCES availableSlots(SlotID));",
   //   (error) => {
   //     if (error) {
   //       console.log(`error occurred while creating slots table ${error}`);
@@ -41,8 +41,23 @@ const createTable = () => {
   //     }
   //   }
   // );
+
   // pool.query(
-  //   'ALTER TABLE availableSlots MODIFY COLUMN SlotID INT AUTO_INCREMENT;'
+  //   "CREATE TABLE IF NOT EXISTS prescription (PresID INT AUTO_INCREMENT PRIMARY KEY NOT NULL, PatientID INT, DocID VARCHAR(20), Date DATE, Medicine VARCHAR(255), Rx VARCHAR(255), CC VARCHAR(255), Treatment_Plan VARCHAR(255), O_E VARCHAR(255), docName varchar(255),  FOREIGN KEY (DocID) REFERENCES Doctors(BMDC_reg));",
+  //   (error) => {
+  //     if (error) {
+  //       console.log(`error occurred while creating users table ${error}`);
+  //     } else {
+  //       console.log("patient table created");
+  //     }
+  //   }
+  // );
+
+  // pool.query(
+  //   'ALTER TABLE Prescription ADD docName VARCHAR(255); '
+  // )
+  //  pool.query(
+  //   'Drop table prescription; '
   // )
 };
 
